@@ -9,14 +9,25 @@ dotenv.config();
 let username = process.env.MONGODB_USERNAME;
 let password = process.env.MONGODB_PASSWORD;
 
-mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.3tvjh.mongodb.net/registrationsDB`)
-   .then(() => {
-       console.log("Connected to MongoDB successfully");
-   })
-   .catch(err => {
-       console.log("MongoDB connection error:", err);
-   });
-
+// mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.3tvjh.mongodb.net/registrationsDB`)
+//    .then(() => {
+//        console.log("Connected to MongoDB successfully");
+//    })
+//    .catch(err => {
+//        console.log("MongoDB connection error:", err);
+//    });
+mongoose.connect(`mongodb+srv://${username}:${password}@cluster1.3tvjh.mongodb.net/registrationsDB`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Keep trying for 5 seconds
+    socketTimeoutMS: 45000, // Close sockets after 45 seconds
+})
+.then(res => {
+    console.log("Connected to MongoDB");
+})
+.catch(err => {
+    console.error("MongoDB connection error:", err);
+});
 const registrationSchema = new mongoose.Schema({
     name: String,
     email: String,
